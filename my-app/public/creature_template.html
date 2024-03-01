@@ -1,0 +1,89 @@
+<div id="{{index}}" data-two-column style="--data-content-height: 672px;">
+    <div id="creature-heading">
+      <h1>{{name}}</h1>
+      <h2>{{size}} {{type}} {{alignment}}</h2>
+    </div>
+
+    <div id="top-stats">
+      <div id="property-line">
+        <h4>Armor Class</h4>
+        <p>{{armor_class.value}} ({{armor_class.value}})</p>
+      </div>
+      <div id="property-line">
+        <h4>Hit Points</h4>
+        <p>{{hit_points}} ({{hit_points_roll}})</p>
+      </div>
+      <div id="property-line">
+        <h4>Speed</h4>
+        <p>#foreach speed type print{{speed}} inline</p>
+      </div>
+
+      <abilities-block data-str={{strength}}
+                       data-dex={{dexterity}}
+                       data-con={{constitution}}
+                       data-int={{intelligence}}
+                       data-wis={{wisdom}}
+                       data-cha={{charisma}}></abilities-block>
+      <div id="property-line">
+        <h4>Saving Throws</h4>
+        <p>#Foreach proficiencies where proficiency.index starts with "saving-throw"</p>
+      </div>
+      <div id="property-line">
+        <h4>Skills</h4>
+        <p>#Foreach proficiencies where proficiency.index starts with "skill"</p>
+      </div>
+      <div id="property-line">
+        <h4>Damage Vulnerabilities</h4>
+        <p>#Foreach damage_vulnerabilities</p>
+      </div>
+      <div id="property-line">
+        <h4>Damage resistances</h4>
+        <p>#Foreach damage_resistances</p>
+      </div>
+      <div id="property-line">
+        <h4>Damage Immunities</h4>
+        <p>#Foreach damage_immunities</p>
+      </div>
+      <div id="property-line">
+        <h4>Senses</h4>
+        <p>#Foreach senses</p>
+      </div>
+      <div id="property-line">
+        <h4>Languages</h4>
+        <p>#Foreach languages</p>
+      </div>
+      <div id="property-line">
+        <h4>Challenge</h4>
+        <p>{{challenge_rating}} +{{proficiency_bonux}} ({{xp}})</p>
+      </div>
+    </div>
+
+    #Foreach special_abilities
+    <div id="property-block">
+      <h4>{{name}}</h4>
+      <p>{{desc}}</p>
+    </div>
+
+    <h3>Actions</h3>
+    #Foreach actions
+    <div id="property-block">
+      <h4>{{name}}</h4>
+      <p>{{desc}}</p>
+    </div>
+
+    
+
+    <h3>Legendary Actions</h3>
+    <p>The {{name}} can take 3 legendary actions, choosing from the
+    options below. Only one legendary action option can be used at a
+    time and only at the end of another creature's turn. The {{name}}
+    regains spent legendary actions at the start of its turn.</p>
+
+    #Foreach legendary actions
+    <div id="property-block">
+      <h4>{{name}}</h4>
+      <p>{{desc}}</p>
+    </div>
+
+    
+  </div>
