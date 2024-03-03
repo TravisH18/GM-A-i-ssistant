@@ -1,26 +1,47 @@
 #tabbed interface for monsters, traps, hazards
 import gradio as gr
-from diffusers import DiffusionPipeline
+from diffusers import DiffusionPipeline, EulerDiscreteScheduler
 
-def image_generator():
-    pipeline = DiffusionPipeline.from_pretrained("0xJustin/Dungeons-and-Diffusion")
+def save_creature(name_tb, type_tb, size_tb, cr_tb, ac_tb, passive_perception_tb,
+        num_hit_dice, type_hit_dice, hp_bonus, average_hp, str_score, dex_score, int_score,
+        con_score, wis_score, cha_score, special_abilities_tb, actions_tb,
+        bonus_actions_tb, reactions_tb, legendary_actions_tb, lair_actions_tb,
+        description_tb):
+    return "Saved!"
+
+def image_generator(name_tb, type_tb, size_tb, cr_tb, ac_tb, passive_perception_tb,
+        num_hit_dice, type_hit_dice, hp_bonus, average_hp, str_score, dex_score, int_score,
+        con_score, wis_score, cha_score, special_abilities_tb, actions_tb,
+        bonus_actions_tb, reactions_tb, legendary_actions_tb, lair_actions_tb,
+        description_tb):
+    model_id = "0xJustin/Dungeons-and-Diffusion"
+    scheduler = EulerDiscreteScheduler.from_pretrained(model_id, subfolder="scheduler")
+    pipe = DiffusionPipeline.from_pretrained(model_id, scheduler=scheduler, use_safetensors=True).to("cuda")
     # https://huggingface.co/docs/diffusers/tutorials/basic_training
-
-    prompt = "New monster description"
-    image = pipeline(prompt, num_inference_steps=25).images[0]
+    additional_info = [
+        name_tb, type_tb, size_tb, cr_tb, ac_tb, passive_perception_tb,
+        num_hit_dice, type_hit_dice, hp_bonus, average_hp, str_score, dex_score, int_score,
+        con_score, wis_score, cha_score, special_abilities_tb, actions_tb,
+        bonus_actions_tb, reactions_tb, legendary_actions_tb, lair_actions_tb,
+        description_tb
+    ]
+    end_prompt = ' '.join([str(elem) for elem in additional_info])
+    prompt = "A dungeons and dragons monster." + end_prompt
+    image = pipe(prompt, num_inference_steps=25).images[0]
     return image
 
-with gr.Blocks() as creature_modal:
+with gr.Blocks(title="Homebrew Monster Modal") as creature_modal:
     with gr.Row(equal_height=True): # Row 1
         name_tb = gr.Textbox(label="Monster Name", placeholder="Enter name") # show_label=True
         type_tb = gr.Textbox(label="Monster Type", placeholder="beast, abberation, dragon, etc.")
-        size_tb = gr.Dropdown(choices=["small", "medium", "large", "huge", "gargantuan"])
-        cr_tb = gr.Dropdown(choices=[x for x in range(1, 31)])
+        size_tb = gr.Dropdown(label="Size", choices=["small", "medium", "large", "huge", "gargantuan"])
+        cr_tb = gr.Dropdown(label="Challenge Rating", choices=[x for x in range(1, 31)])
     with gr.Row(equal_height=True): # Row 2
         with gr.Column(scale=1): # Row 2 Col 1
             ac_tb = gr.Textbox(label="Armor Class", placeholder="#")
             passive_perception_tb = gr.Textbox(label="Passive Perception", placeholder="#")
-            hit_dice = gr.Textbox(label="Hit Dice", placeholder="ex. 17d12 or 5d6") #dropdown select to automate average hp
+            num_hit_dice = gr.Textbox(label="Hit Dice", placeholder="#") #dropdown select to automate average hp
+            type_hit_dice = gr.Dropdown(label="Type of hitdice", choices=["d4", "d6", "d8", "d10", "d12", "d20", "d100"])
             hp_bonus = gr.Textbox(label="HP Bonus", placeholder="Equal to number of hit dice * con modifier") # put ability scores first so we can automate this
             average_hp = gr.Textbox(label="Average HP", placeholder="Avg of hit dice * hp bonus")
         with gr.Column(scale=1): # Row 2 Col 2
@@ -47,7 +68,17 @@ with gr.Blocks() as creature_modal:
             lair_actions_tb = gr.Textbox(label="Lair Actions", placeholder="Enter name of the lair action and its description ", lines=3)
     with gr.Row(equal_height=True): # Row 6
         description_tb = gr.Textbox(label="Monster Description", placeholder="Describe the monster here. Be as detailed as possible.")
-    submit_btn = gr.Button("Generate Art").click(image_generator)
+    input_components = [
+        name_tb, type_tb, size_tb, cr_tb, ac_tb, passive_perception_tb,
+        num_hit_dice, type_hit_dice, hp_bonus, average_hp, str_score, dex_score, int_score,
+        con_score, wis_score, cha_score, special_abilities_tb, actions_tb,
+        bonus_actions_tb, reactions_tb, legendary_actions_tb, lair_actions_tb,
+        description_tb
+    ]
+    gen_art_btn = gr.Button("Generate Creature").click(image_generator, inputs=input_components, outputs="image")
+    save_btn = gr.Button("Save Creature").click(save_creature, inputs=input_components, output="text")
+
+# creature_modal.launch(debug=True)
     
 if __name__ == "__main__":
     # modals = []
@@ -56,5 +87,5 @@ if __name__ == "__main__":
     # output = gr.ImageEditor()
     # modal = gr.TabbedInterface(modals)
 
-    creature_modal.launch()
+    creature_modal.launch(debug=True)
 
