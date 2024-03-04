@@ -58,3 +58,9 @@ if __name__ == "__main__":
 
     creature_modal.launch()
 
+    # for mounting to specific url
+    # CUSTOM_PATH = "/gradio"
+    # from server import app
+    # gr.mount_gradio_app(app, creature_modal, path=CUSTOM_PATH)
+    # Or embed in an iframe
+

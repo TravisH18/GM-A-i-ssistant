@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0 shrink-to-fit=no">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>GM A(I)ssistant</title>
+
+  <link rel="stylesheet" href="../assets/style.css">
+  <!-- This script tag bootstraps PyScript -->
+  <script type="module" src="https://pyscript.net/releases/2024.2.1/core.js"></script>
+
+  <!-- Python File Import -->
+  <script type="py" src="homebrewMonsterModal.py" config="./pyscript.json"></script>
+</head>
+
+<body>
+  <div id="app">
+    <h1>GM A(I)ssistant</h1>
+    <h2>Homebrew Monster Creator</h2>
+    <py-script>
+      from ..homebrewMonsterModal import creature_modal
+      creature_modal.launch()
+    </py-script>
+  </div>
+  
+</body>
+
+</html>

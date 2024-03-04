@@ -5,22 +5,26 @@ This is going to be the repo for the full TTRPG Copilot
 
 Features I want to include:
 
-For GMs
+## For GMs
 - Encounter Builder
 - Homebrew Monster, Trap, Hazard creator w/ art generation.
 - Map Generation w/ editor
 
-Encoutner Runner
+## Encoutner Runner
 - 
 
-Maps
+## Maps
 - Generation + editor
 
-For Players:
+## For Players:
 - Character builder / Import from PDF 
 - Character Art / Icon generator w/ editor
 
 
-Technologies to use.
-Typescript (Foalts)
-Transformers.js 
+Technologies used
+HuggingFace (Diffusionpipeline) : For Text to Image Generation
+Gradio : Diffusion Apps Handler
+Sanic : Backend Controller
+Jinja2 : HTML Templates
+Oracle Autonomous DB : Host GM's personal DB
+D&D 5e REST API: Non-homebrew monster info + Necessary Game Rules.

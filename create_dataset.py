@@ -22,7 +22,9 @@ for i in response.text["results"]:
 
     # first use index to get new request
 
-    monsterURL = baseURL + "api/monsters"
+    monsterURL = baseURL + "api/monsters/" + i["index"]
+
+    # use pandas to change results json into a dataframe?
 
     # convert image from url into numpy array or PIL image
 
