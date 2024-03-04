@@ -25,6 +25,6 @@ Technologies used
 HuggingFace (Diffusionpipeline) : For Text to Image Generation
 Gradio : Diffusion Apps Handler
 Sanic : Backend Controller
-Jinja2 : HTML Templates
+Pyscript / Jinja2 or PyWebIo : Front end
 Oracle Autonomous DB : Host GM's personal DB
 D&D 5e REST API: Non-homebrew monster info + Necessary Game Rules.
