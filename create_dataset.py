@@ -3,6 +3,8 @@ from bs4 import BeautifulSoup
 import os
 from datasets import load_dataset, Image
 import pandas as pd
+from PIL import Image
+from io import BytesIO
 
 def make_prompt(data):
   prompt = f"The {data['name']} is a {data['size']} {data['alignment']} {data['type']} with the following characteristics:\n"
@@ -64,7 +66,7 @@ def compile_dataset(base_url, push_to_hub):
   # Specify the directory where you want to save the images
   save_directory = 'data'
   os.makedirs(save_directory, exist_ok=True)
-
+  all_monsters_with_images = []
   for page in range(1, total_pages + 1):
 
     # Construct the URL for each page
@@ -107,6 +109,7 @@ def compile_dataset(base_url, push_to_hub):
               print(f"No 'a' tag found for row_id {row_id} on page {page}.")
           # if we made it here we have successfully downloaded the image
           # next we contruct the prompt by pinging rest api and passing data dict to function
+          
           # define pandas dataframe with two columns 
           # cols = [filename, prompt]
           # df[row_id] = prompt
