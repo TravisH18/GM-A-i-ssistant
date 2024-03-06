@@ -8,32 +8,36 @@ def make_prompt(data):
   prompt = f"The {data['name']} is a {data['size']} {data['alignment']} {data['type']} with the following characteristics:\n"
 
   # Add basic information
-  prompt += f"**Attributes**:\n"
-  prompt += f"- Armor Class: {data['armor_class'][0]['value']}\n"
-  prompt += f"- Hit Points: {data['hit_points']}\n"
-  prompt += f"- Speed: {data['speed']}\n"
+  # prompt += f"**Attributes**:\n"
+  prompt += f"- Armor Class: {data['armor_class'][0]['value']} "
+  prompt += f"- Hit Points: {data['hit_points']} "
+  prompt += f"- Speed: {data['speed']} "
 
   # Add ability scores
-  prompt += f"\n**Ability Scores**:\n"
-  prompt += f"- Strength: {data['strength']}\n"
-  prompt += f"- Dexterity: {data['dexterity']}\n"
-  prompt += f"- Constitution: {data['constitution']}\n"
-  prompt += f"- Intelligence: {data['intelligence']}\n"
-  prompt += f"- Wisdom: {data['wisdom']}\n"
-  prompt += f"- Charisma: {data['charisma']}\n"
+  # prompt += f"\n**Ability Scores**:\n"
+  prompt += f"- Strength: {data['strength']} "
+  prompt += f"- Dexterity: {data['dexterity']} "
+  prompt += f"- Constitution: {data['constitution']} "
+  prompt += f"- Intelligence: {data['intelligence']} "
+  prompt += f"- Wisdom: {data['wisdom']} "
+  prompt += f"- Charisma: {data['charisma']} "
 
   # Add special abilities
-  prompt += f"\n**Special Abilities**:\n"
+  #prompt += f"\n**Special Abilities**:\n"
+  prompt += f"The {data['name']} has the following special abilities:\n"
   for ability in data['special_abilities']:
       prompt += f"- {ability['name']}: {ability['desc']}\n"
 
   # Add actions
-  prompt += f"\n**Actions**:\n"
+  # prompt += f"\n**Actions**:\n"
+  prompt += f"The {data['name']} can take the following actions:\n"
   for action in data['actions']:
       prompt += f"- {action['name']}: {action['desc']}\n"
+
+  # if legendary_action in data['legendary_actions']: 
   return prompt
 
-def get_monster_image(img_div):
+def get_monster_image(img_div, save_directory, row_id, page):
   anchor_tag = img_div.find('a')
   if anchor_tag and 'href' in anchor_tag.attrs:
     # Construct the image URL
@@ -49,8 +53,8 @@ def get_monster_image(img_div):
         print(f"Image for row_id {row_id} on page {page} downloaded successfully.")
     else:
         print(f"Failed to download image for row_id {row_id} on page {page}.")
-else:
-    print(f"No 'a' tag found for row_id {row_id} on page {page}.")
+  else:
+      print(f"No 'a' tag found for row_id {row_id} on page {page}.")
 
 def compile_dataset(base_url, push_to_hub):
   df = pd.DataFrame()
@@ -104,7 +108,7 @@ def compile_dataset(base_url, push_to_hub):
           # if we made it here we have successfully downloaded the image
           # next we contruct the prompt by pinging rest api and passing data dict to function
           # define pandas dataframe with two columns 
-          # filename, prompt
+          # cols = [filename, prompt]
           # df[row_id] = prompt
 
         
