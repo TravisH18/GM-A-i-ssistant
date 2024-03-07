@@ -58,7 +58,7 @@ def get_monster_image(img_div, save_directory, row_id, page):
   else:
       print(f"No 'a' tag found for row_id {row_id} on page {page}.")
 
-def compile_dataset(base_url, push_to_hub):
+def compile_dataset_with_dndbeyond(base_url, push_to_hub):
   df = pd.DataFrame()
   total_pages = 156
   rows_per_page = 20
@@ -149,10 +149,20 @@ def compile_dataset(base_url, push_to_hub):
     dataset = load_dataset("imagefolder", data_dir="/data")
     dataset.push_to_hub("TravisHudson/DND-Monster-Diffusion")
 
+def compile_dataset(api_url, image_json_url):
+  image_json_response = requests.get(image_json_url)
+  if image_json_response.status_code == 200:
+     image_data = image_json_response.content
+     for i in image_data:
+        # use json index to get image and ping api for data
+        monster_response = requests.get(api_url + i["index"])
+        monster_data = monster_response.content
+        new_monster = Monster(monster_data)
+   
 
 if __name__ == "__main__":
-  base_url = 'https://www.dndbeyond.com/monsters'
+  #base_url = 'https://www.dndbeyond.com/monsters'
   # or use this
-  # "https://github.com/alexandregpereira/Monster-Compendium-Content/blob/main/json/monster-images.json"
-
-  compile_dataset(base_url, push_to_hub=False)
+  image_json_url = "https://github.com/alexandregpereira/Monster-Compendium-Content/blob/main/json/monster-images.json"
+  api_url = "https://www.dnd5eapi.co/"
+  compile_dataset(api_url, image_json_url)
