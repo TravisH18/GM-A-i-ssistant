@@ -1,29 +1,30 @@
 # models/monster.py
 
 class Monster:
-    def __init__(self, name, size, type, alignment, armor_class, hit_points, speed, strength, dexterity, constitution, intelligence, wisdom, charisma, abilities, skills, senses, actions, languages, challenge, legendary_actions, description, image=None):
-        self.name = name
-        self.size = size
-        self.alignment = alignment 
-        self.type = type
-        self.armor_class = armor_class
-        self.hit_points = hit_points
-        self.speed = speed
-        self.str = strength
-        self.dex = dexterity
-        self.con = constitution
-        self.int = intelligence
-        self.wis = wisdom
-        self.cha = charisma
-        self.special_abilities = abilities
-        self.skills = skills
-        self.senses = senses
-        self.action = actions
-        self.languages = languages
-        self.challenge = challenge
-        self.description = description
-        self.legendary_actions = legendary_actions
-        self.image = image
+    def __init__(self, monster_data, lore_data):
+        self.index = monster_data.get('index')
+        self.name = monster_data.get('name')
+        self.size = monster_data.get('size')
+        self.alignment = monster_data.get('alignment')
+        self.type = monster_data.get('type')
+        self.armor_class = monster_data.get('armor_class')
+        self.hit_points = monster_data.get('hit_points')
+        self.speed = monster_data.get('speed')
+        self.str = monster_data['strength'] # monster_data['ability_scores'][0]['value']
+        self.dex = monster_data['dexterity'] # monster_data['ability_scores'][1]['value']
+        self.con = monster_data['constitution'] # monster_data['ability_scores'][2]['value']
+        self.int = monster_data['intelligence'] # monster_data['ability_scores'][3]['value']
+        self.wis = monster_data['wisdom'] # monster_data['ability_scores'][4]['value']
+        self.cha = monster_data['charisma'] # monster_data['ability_scores'][5]['value']
+        self.special_abilities = monster_data.get('special_abilities')
+        self.skills = monster_data.get('skills')
+        self.senses = monster_data.get('senses')
+        self.actions = monster_data.get('actions')
+        self.languages = monster_data.get('languages')
+        self.challenge = monster_data.get('challenge_rating')
+        self.legendary_actions = monster_data.get('legendary_actions')
+        #self.image = monster_data['image']
+        self.description = lore_data
 
     def __str__(self): # Monster Prompt
         prompt = f"The {self.name} is a {self.size} {self.alignment} {self.type} with the following characteristics:\n"
@@ -31,9 +32,11 @@ class Monster:
         # Add basic information
         prompt += f"{self.description}\n. This creatures statististics are as follows:\n"
         # prompt += f"**Attributes**:\n"
-        prompt += f"- Armor Class: {self.armor_class[0]['value']} "
+        prompt += f"- Armor Class: {self.armor_class[0]["value"]} ({self.armor_class[0]["type"]}) "
         prompt += f"- Hit Points: {self.hit_points} "
-        prompt += f"- Speed: {self.speed} "
+        prompt += f"- Movement Speed: "
+        for key, value in self.speed.items():
+            prompt += f"{key.capitalize()} {value} "
 
         # Add ability scores
         # prompt += f"\n**Ability Scores**:\n"

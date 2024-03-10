@@ -1,7 +1,7 @@
 from sanic import Sanic, Database
 from sanic_ext import render
 from sanic.response import text
-from .config import MyConfig
+from .configApp import MyConfig
 from .api import api
 
 # For jinja template info 
