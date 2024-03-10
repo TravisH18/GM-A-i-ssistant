@@ -27,6 +27,7 @@ def compile_dataset(push_to_hub):
     if row["image_url"].find("default") == -1:
       # Download the image
       image_response = requests.get(row["image_url"])
+      
       if image_response.status_code == 200:
           # Save the image with the row_id as the filename
           image_filename = f'{save_dir}/{row["monster_index"]}.png'
@@ -35,7 +36,6 @@ def compile_dataset(push_to_hub):
           monster_data = requests.get(api_url + "/api/monsters").json()
           
           for m in monster_data["results"]:
-           
             monster_url = api_url + m.get("url")
             monster_row = requests.get(monster_url).json()
             monster_lore = get_lore_data(lore_data, m)
@@ -62,16 +62,6 @@ def compile_dataset(push_to_hub):
     df.to_csv(os.path.join(save_dir, 'metadata.csv'))
     dataset = load_dataset("imagefolder", data_dir=save_dir)
     dataset.push_to_hub("TravisHudson/DND-Monster-Diffusion")
-
-def compile_dataset(api_url, image_json_url):
-  image_json_response = requests.get(image_json_url)
-  if image_json_response.status_code == 200:
-     image_data = image_json_response.content
-     for i in image_data:
-        # use json index to get image and ping api for data
-        monster_response = requests.get(api_url + i["index"])
-        monster_data = monster_response.content
-        new_monster = Monster(monster_data)
    
 
 if __name__ == "__main__":
