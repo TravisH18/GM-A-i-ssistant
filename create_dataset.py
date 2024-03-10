@@ -63,6 +63,16 @@ def compile_dataset(push_to_hub):
     dataset = load_dataset("imagefolder", data_dir=save_dir)
     dataset.push_to_hub("TravisHudson/DND-Monster-Diffusion")
 
+def compile_dataset(api_url, image_json_url):
+  image_json_response = requests.get(image_json_url)
+  if image_json_response.status_code == 200:
+     image_data = image_json_response.content
+     for i in image_data:
+        # use json index to get image and ping api for data
+        monster_response = requests.get(api_url + i["index"])
+        monster_data = monster_response.content
+        new_monster = Monster(monster_data)
+   
 
 if __name__ == "__main__":
   compile_dataset(push_to_hub=True)
